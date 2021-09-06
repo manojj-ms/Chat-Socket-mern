@@ -62,6 +62,11 @@ class App extends React.Component {
       content: this.state.content,
     });
 
+    if (this.state.content == "") {
+      alert("Content must be filled out");
+      return false;
+    }
+
     this.setState((state) => {
       // Update the chat with the user's message and remove the current message.
       return {
@@ -69,7 +74,7 @@ class App extends React.Component {
           name: state.name,
           content: state.content,
         }],
-        content: '',
+        // content: '',
       };
     }, this.scrollToBottom);
   }

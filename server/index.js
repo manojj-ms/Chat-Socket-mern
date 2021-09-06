@@ -10,17 +10,24 @@ const port = process.env.PORT || 5000;
 const Message = require('./Message');
 const mongoose = require('mongoose');
 
-mongoose.connect(uri, {
-  useUnifiedTopology: true,
+mongoose.connect('mongodb://localhost/tutorials_db', {
   useNewUrlParser: true,
-});
+  useUnifiedTopology: true
+})
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+  })
+  .catch(err => {
+    console.error("Connection error", err);
+    process.exit();
+  });
 
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
 io.on('connection', (socket) => {
 
   // Get the last 10 messages from the database.
-  Message.find().sort({createdAt: -1}).limit(10).exec((err, messages) => {
+  Message.find().sort({ createdAt: -1 }).limit(10).exec((err, messages) => {
     if (err) return console.error(err);
 
     // Send the last messages to the user.
